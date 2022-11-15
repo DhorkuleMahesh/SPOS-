@@ -1,0 +1,108 @@
+ //prajwal salunke
+// listing 1: Write a program for first come first serve CPU
+
+#include <iostream >
+
+ typedef struct Process {
+ int PR, AT, BT, WT;
+ } Process;
+
+ typedef struct Gantt {
+ int PR, GT;
+ } Gantt;
+
+ static Gantt Chart[10];
+ int GN;
+
+ void GanttChart() {
+ int i;
+ float Avg;
+ std::cout << std::endl << std::endl << "Gantt Chart" << std::endl;
+
+ for (i = 0; i < GN * 5; i++) {
+ std::cout << "-";
+ }
+
+ std::cout << std::endl;
+ std::cout << "|";
+
+ for (i = 0; i < GN - 1; i++) {
+ std::cout << " P" << Chart[i].PR << " |";
+ }
+ std::cout << std::endl;
+
+ for (i = 0; i < GN * 5; i++) {
+ std::cout << "-";
+ }
+ std::cout << std::endl << std::endl;
+
+ for (i = 0; i < GN; i++) {
+ std::cout << Chart[i].GT << " ";
+ }
+ }
+ void Wait(Process P[10], int n) {
+ int i, j;
+
+ for (i = 0; i < n; i++) {
+ P[i].WT = Chart[i].GT - P[i].AT;
+ }
+ }
+
+ void Accept(Process P[10], int *n) {
+ int i, j;
+ Process temp;
+
+ std::cout << std::endl << "******* FCFS CPU Scheduling ********" << std::
+endl;
+ std::cout << "Enter Number of Processes: ";
+ std::cin >> *n;
+ std::cout << std::endl << "Enter Arrival Time , CPU Burst Time";
+
+ for (i = 0; i < *n; i++) {
+ P[i].PR = i;
+ std::cout << std::endl << "Process " << i << ": ";
+ std::cin >> P[i].AT >> P[i].BT;
+ P[i].WT = 0;
+ }
+ }
+
+ void Display(Process P[10], int n) {
+ int i;
+
+ std::cout << std::endl << "Process\tAT\tBT\tWT" << std::endl;
+
+ for (i = 0; i < n; i++) {
+ std::cout << std::endl << P[i].PR << "\t" << P[i].AT << "\t" << P[i].BT
+<< "\t" << P[i].WT;
+ }
+ std::cout << std::endl;
+ }
+
+ void FCFS(Process P[10], int n) {
+ int i;
+ Chart[0].GT = P[0].AT;
+ Chart[0].PR = P[0].PR;
+
+ for (i = 1; i < n; i++) {
+ Chart[i].GT = Chart[i - 1].GT + P[i - 1].BT;
+ Chart[i].PR = P[i].PR;
+ }
+ Chart[i].GT = Chart[i - 1].GT + P[i - 1].BT;
+ GN = i + 1;
+ }
+
+ int main() {
+ Process P[10];
+ int N;
+
+ Accept(P, &N);
+ Display(P, N);
+ std::cin.get();
+
+ std::cout << std::endl << "FCFS" << std::endl;
+ FCFS(P, N);
+ Wait(P, N);
+ Display(P, N);
+ GanttChart();
+ std::cin.get();
+ }
